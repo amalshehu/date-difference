@@ -1,22 +1,27 @@
-function addOneDay(d1, m1, y1, d2, m2, y2) {
-  if (d1 < 30) {
-    return [d1 + 1, m1, y1];
-  } else if (m1 < 12) {
-    return [1, m1 + 1, y1];
+function dateDifference(days, d1, m1, y1, d2, m2, y2) {
+  if (m1 == m2 && y1 == y2) {
+    return days + d2 - d1;
+  }
+  days = days + getDaysInMonth(m1, y1) - d1 + 1;
+  d1 = 1;
+  if (m1 == 12) {
+    m1 = 1;
+    y1++;
   } else {
-    return [1, 1, y1 + 1];
+    m1++;
   }
+  return dateDifference(days, d1, m1, y1, d2, m2, y2);
 }
 
-function numberOfDays(d1, m1, y1, d2, m2, y2) {
-  let days = 0;
-  days++;
-
-  while (d1 != d2 && m1 != m2 && y1 != y2) {
-    days++;
-    [d1, m1, y1] = [...addOneDay(d1, m1, y1, d2, m2, y2)];
-    console.log('D M Y', d1, m1, y1);
+function getDaysInMonth(month, year) {
+  if (month == 2) {
+    return isLeapYear(year) ? 29 : 28;
   }
-  return days;
+  return [4, 6, 9, 11].includes(month) ? 30 : 31;
 }
-console.log(numberOfDays(20, 5, 2017, 3, 3, 2018));
+
+function isLeapYear(year) {
+  return year % 4 === 0 ? true : false;
+}
+console.log(dateDifference(0, 16, 7, 1993, 3, 3, 2018));
+console.log(dateDifference(0, 20, 5, 2017, 3, 3, 2018));
